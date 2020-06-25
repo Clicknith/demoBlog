@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class BlogController extends AbstractController
 {
@@ -26,7 +29,7 @@ class BlogController extends AbstractController
 
         //$repo = $this->getDoctrine()->getRepository(Article::class);
 
-        $articles = $repo->findAll();
+        $articles = $repo->findAll(); //doctrine recuperates the database from article.php from entity whoch here represents the "$articles" and then from repository "ArticleRepository" from repository which represents the "$repo".
 
         dump($articles); 
 
@@ -54,10 +57,79 @@ class BlogController extends AbstractController
 
      /**
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create()
+    public function create(Article $article = null, Request $request, EntityManagerInterface $manager)
     {
-        return $this->render('blog/create.html.twig');
+        dump($request);
+
+        // if($request->request->count()>0)
+        // {
+        //     $article = new Article;
+
+        //     $article -> setTitle($request->request->get('title'))
+        //              -> setContent($request->request->get('content'))
+        //              -> setImage($request->request->get('image'))
+        //              -> setCreatedAt(new \DateTime());
+
+        //     $manager->persist($article);
+        //     $manager->flush();
+
+        //     dump($article);
+
+        //     return $this->redirectToRoute('blog_show',[
+        //         'id' => $article->getId()
+        //        ]);
+
+        // }
+
+        /*
+            ->add('title', TextType::class, [
+                         'attr'=> [
+                                                      
+                            'placeholder' => "Saisir le titre de l'article",
+                            'class' => "col-md-6 mx-auto"
+                            ]
+                     ])
+                    $article->setTitle("Titre à la con")
+                            ->setContent("Contenu à la con");
+
+        */
+
+
+        if(!$article)
+        {
+            $article = new Article;
+        }
+
+              
+        $form = $this->createFormBuilder($article)  /// Predefined Symfony Method 'createFormBuilder'
+
+                     ->add('title')
+                     ->add('content')
+                     ->add('image')
+                     ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $article->setCreatedAt(new \DateTime);
+
+            $manager->persist($article);
+            $manager->flush(); 
+
+            dump($article);
+
+            return $this->redirectToRoute('blog_show',[
+                    'id' => $article->getId()
+                ]);
+        }
+
+
+        return $this->render('blog/create.html.twig', [
+            'formArticle' => $form->createView()      /// Predefined Symfony Method 'createView' following the above method 'createFormBuilder'
+        ]);
     }
 
     
