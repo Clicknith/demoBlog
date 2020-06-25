@@ -1,10 +1,29 @@
 {% extends "base.html.twig" %}
 
+
+
 {% block body %}
 
-    <h3 class="display-4 my-4 text-center">Créer un nouvel titre</h3>
+    <h5 class="display-4 text-center my-4">Créer un nouvel article</h5>
 
-    <form>
+    {# {{ form(formArticle) }}  'form' is a predefined Twig Method, and 'formArticle' comes from BlogController line 115 #}
+
+    {# form_start() fonction de TWIG permettant de commencer le formulaire, de générer la balise <form> ouvrante, Symfony intègre automatiquement l'attribut 'method="post"' #}{# form_end() fonction de TWIG permettant de terminer le formulaire, de générer la balise </form> fermante #}     {# form_row() fonction TWIG qui permet d'afficher les champs du formulaire 1 par 1 #}{# Le bouton submit est codé en dur puisque le formulaire servira à la fois et à insérer mais aussi à modifier #}{# SI on crée la bouton avec la fonction add() dans le controller, il sera difficile de modifier son lable (modifier ou supprimer) #}
+
+    
+    {{form_start(formArticle, {'attr': {'class': 'col-md-7 mx-auto'}} ) }}
+
+        {{ form_row(formArticle.title, {'attr': {'placeholder': "Saisir le litre de l'article"}}) }}
+
+        {{ form_row(formArticle.content, {'attr': {'placeholder': "Contenu de l'article", "rows": 10}}) }}
+
+        {{ form_row(formArticle.image, {'attr': {'placeholder': "Saisir l'URL de l'image..."}}) }}
+
+        <button type="submit" class="btn btn-info">Enregistrer </button>
+
+    {{form_end(formArticle) }}
+
+    {# <form method="post" action="" class="col-md-6 mx-auto">
         <div class="form-group">
             <label for="exampleInputEmail1">Title</label>
             <input type="text" class="form-control" id="title" name="title">
@@ -18,7 +37,7 @@
             <input type="text" class="form-control" id="image" name="image">
         </div>
         <button type="submit" class="btn btn-dark">Enregistrer</button>
-    </form>
+    </form> #}
     
 
 
