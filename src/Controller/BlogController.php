@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
 {
@@ -59,7 +60,8 @@ class BlogController extends AbstractController
      * @Route("/blog/new", name="blog_create")
      * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create(Article $article = null, Request $request, EntityManagerInterface $manager)
+    public function  form(Article $article = null, Request $request, EntityManagerInterface $manager) // Request is a predefined Symfony Class == when the form is filled up, this particular class 'Request' collects the inputs from form and sends to the DB!
+    //Method 'Create' depends on the Interface 'EntityManagerInterface', without this interface the method 'Create' cannot exceute on its own!
     {
         dump($request);
 
@@ -101,21 +103,25 @@ class BlogController extends AbstractController
         {
             $article = new Article;
         }
-
+        $form = $this->createForm(ArticleType::class, $article);
               
-        $form = $this->createFormBuilder($article)  /// Predefined Symfony Method 'createFormBuilder'
+        // $form = $this->createFormBuilder($article)  /// Predefined Symfony Method 'createFormBuilder' to create a form
+        //              ->add('title')
+        //              ->add('content')
+        //              ->add('image')
+        //              ->getForm();
 
-                     ->add('title')
-                     ->add('content')
-                     ->add('image')
-                     ->getForm();
-
-        $form->handleRequest($request);
+        $form->handleRequest($request); // it collects the information from the object and sends it to the particular objetc, ex: collects and image and sends it to to image DB
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $article->setCreatedAt(new \DateTime);
 
+            if(!$article->getId())
+            {
+
+               $article->setCreatedAt(new \DateTime);
+
+            }
             $manager->persist($article);
             $manager->flush(); 
 
@@ -128,8 +134,10 @@ class BlogController extends AbstractController
 
 
         return $this->render('blog/create.html.twig', [
-            'formArticle' => $form->createView()      /// Predefined Symfony Method 'createView' following the above method 'createFormBuilder'
+            'formArticle' => $form->createView(), /// Predefined Symfony Method 'createView' which follows the above method 'createFormBuilder'
+            'editMode' => $article->getId() !=null    
         ]);
+
     }
 
     
