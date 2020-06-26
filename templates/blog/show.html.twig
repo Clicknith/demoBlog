@@ -4,13 +4,14 @@
 
 <h1 class="display-4 my-4 text-center" > Détails de l'article </h1>
 
-    <div class="col-md-12 card mb-2  p-0">
+    <div class="col-md-12 card mb-2 text-center p-0">
         <img src="{{ article.image|replace({"200": "1000/300"}) }}" class="card-img-top" alt="{{ article.title }}">
         <div class="card-body">
             <h5 class="card-title text-center">{{ article.title }}</h5>
             <p class="card-text text-center">{{ article.content|raw }}</p>   
             <hr>
-            <p class="font-italic text-right"> Posté le {{ article.createdAt|date("d/m/Y") }} à {{ article.createdAt|date("H:i:s") }} </p>       
+            <span class="col-md-2 justify-content-md-around"><a href="{{ path('blog_edit', {'id':article.id}) }}"  class="text-left btn btn-warning">Modifier</a></span>
+            <span class="col-md-2 font-italic justify-content-md-around"> Posté le {{ article.createdAt|date("d/m/Y") }} à {{ article.createdAt|date("H:i:s") }} </span>       
         </div>
     </div>
 

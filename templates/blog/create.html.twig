@@ -4,7 +4,13 @@
 
 {% block body %}
 
-    <h5 class="display-4 text-center my-4">Créer un nouvel article</h5>
+    <h1 class="display-4 text-center my-4">
+    {% if editMode %}
+              Modification de l' article
+    {% else %}          
+              Créer un nouvel article
+    {% endif %}  
+    </h1>
 
     {# {{ form(formArticle) }}  'form' is a predefined Twig Method, and 'formArticle' comes from BlogController line 115 #}
 
@@ -19,8 +25,16 @@
 
         {{ form_row(formArticle.image, {'attr': {'placeholder': "Saisir l'URL de l'image..."}}) }}
 
-        <button type="submit" class="btn btn-info">Enregistrer </button>
+        <button type="submit" class="btn btn-info">
+        
+        {% if editMode %}
+            Enregistrer les modifications
+        {% else %}
+            Enregistrer
+        {% endif %}
+        </button>
 
+        
     {{form_end(formArticle) }}
 
     {# <form method="post" action="" class="col-md-6 mx-auto">
