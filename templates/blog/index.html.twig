@@ -14,6 +14,7 @@
                 <img src="{{ data.image }}" class="card-img-top" alt="{{ data.title }}">
                 <div class="card-body">
                     <h5 class="card-title"> {{ data.title }} </h5> <!-- to dynamically change the title name for each cards -->
+                    
                     <p class="card-text"> {{ data.content|slice(0, 100)|raw }}... </p> <!-- 'raw' or 'striptags'to remove the <p> tags from the sides on the contents-->
                     <hr>
                     <p> Posté le {{ data.createdAt|date("d/m/Y") }} à {{ data.createdAt|date("H:i:s") }} </p>

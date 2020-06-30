@@ -4,6 +4,20 @@
 
 {% block body %}
 
-    <h1 class="display-4 text-center my-4"> Liste des Articles </h1>
+    <h1 class="display-4 text-center my-4"> Créer votre compte </h1>
     
+    {{ form_start(form, {'attr': {'class': 'col-md-6 mx-auto'}}) }}
+
+         {{ form_row(form.username, {'label': "Nom de'utilisateur"}) }}
+
+         {{ form_row(form.email) }}
+
+         {{ form_row(form.password, {'label': "Mot de Passe"}) }}
+
+         {{ form_row(form.confirm_password, {'label': "Confirmer votre mot de passe"}) }}
+
+        <button type="submit" class="btn btn-dark"> Valider votre Inscription </button>
+
+    {{ form_end(form) }}
+
 {% endblock %}
