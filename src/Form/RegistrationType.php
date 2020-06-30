@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegistrationType extends AbstractType
 {
@@ -14,8 +15,8 @@ class RegistrationType extends AbstractType
         $builder
             ->add('email')
             ->add('username')
-            ->add('password')
-            ->add('confirm_password')
+            ->add('password', PasswordType::class) // 'PasswordType'is predefined class in Symfony that displays a password field and masks the inputs in the Registration Form
+            ->add('confirm_password', PasswordType::class) // adding a new field to confirm password, but this will not be inserted in the DB.
         ;
     }
 

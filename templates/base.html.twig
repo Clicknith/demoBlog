@@ -14,7 +14,7 @@
     <body>
 
         <nav class="navbar navbar-expand-md navbar-dark bg-secondary">
-            <a class="navbar-brand" href="#">My Symfony Blog</a>
+            <a class="navbar-brand" href="#">My Symfony</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,12 +24,19 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ path('home') }}">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="{{ path('blog') }}">Articles</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('blog_create') }}">Create New Article</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('blog_create') }}">Créer un Article</a>
                     </li>
+                     <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('security_registration') }}">Créer votre compte</a>
+                    </li>
+                     <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('security_login') }}">Identifiez-vous</a>
+                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                  <div class="dropdown-menu" aria-labelledby="dropdown04">
@@ -44,6 +51,8 @@
                 </form>
             </div>
         </nav>
+
+        {{ dump(app.user) }}
 
         <section class="container my-container">  
         {% block body %}
