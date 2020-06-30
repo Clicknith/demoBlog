@@ -2,26 +2,72 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\Article;
+use App\Entity\Comment;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
+ 
 class ArticleFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for ($i = 1; $i <= 10; $i++)
-        {
-            $article = new Article; // pour pouvoir créer des articles et les insérer en BDD, nous devons instancier la classe/Entité Article qui permet de renseigner les titres, cntenu, image et date de l'article // On fait appel à tous les setteurs de l objet $article pour ajouter un titre, une image, une date à nos articles              
+        $faker = \Faker\Factory::create('fr_FR');
 
-            $article->setTitle("Titre de l'article n° $i")
-                    ->setContent("<P>Contenu de l'article n°$i</p>")
-                    ->setImage("https://picsum.photos/200")
-                    ->setCreatedAt(new \DateTime());
-                  
-            $manager->persist($article);    // La classe ObjectManager est une classe prédéfinie en Symfony qui permet de manipuler les lignes de la BDD (INSERT, UPDATE, DELETE) // persist() est une méthode issue de la classe ObjectManager qui permet de préparer les insertions et de les garder en mém
+        // creation of 3 categories 
+        for($i = 1; $i <= 3; $i++)
+        {
+            $category = new Category;
+                
+            $category -> setTitle($faker->sentence())
+                    -> setDescription($faker->paragraph());
+
+            $manager -> persist($category);
+
+
+            // creation of 4 - 6 Articles per category 
+            for($j = 1; $j <= mt_rand(4,6); $j++)
+            {
+                $article = new Article;
+
+                $content = '<p>' . join($faker->paragraphs(5), '</p><p>') . '</p>';
+
+                $article -> setTitle($faker->sentence())
+                            -> setContent($content)
+                            -> setImage($faker->imageUrl())
+                            -> setCreatedAt($faker->dateTimeBetween('-6 months'))
+                            -> setCategory($category);
+
+
+                $manager -> persist($article);
+
+                // creation of 4 - 10 Comments per Article 
+                for($k = 1; $k <= mt_rand(4,10); $k++)
+                {
+
+                    $comment = new Comment;
+
+                    $content = '<p>' . join($faker->paragraphs(2), '</p><p>') . '</p>';
+
+                    $now = new \DateTime;
+                    $interval = $now->diff($article->getCreatedAt()); //Represents the Time in TimeStamp between the date of creation of the Article and the current time.
+                    $days = $interval->days; // N° of days between the date of creation of the Article and current day.
+                    $minimum ='-' . $days . 'days';
+
+                    $comment -> setAuthor($faker->name)
+                            -> setContent($content)
+                            -> setCreatedAt($faker->dateTimeBetween($minimum))
+                            -> setArticle($article);
+
+                    $manager -> persist($comment);
+                }
+            
+            }
         }
 
-        $manager->flush();
+        $manager -> flush();
+
     }
 }
