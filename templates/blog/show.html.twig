@@ -10,7 +10,13 @@
             <h5 class="card-title text-center">{{ article.title }}</h5>
             <p class="card-text text-center">{{ article.content|raw }}</p>   
             <hr>
+
+            {% if app.user %} {#If the user is connected 'Modifier l'article will be displayed' #}
+                            
             <span class="col-md-2"><a href="{{ path('blog_edit', {'id':article.id}) }}"  class="text-left btn btn-warning">Modifier</a></span>
+
+            {% endif %}
+
             <span class="col offset-md-4 font-italic text-right"> Posté le {{ article.createdAt|date("d/m/Y") }} à {{ article.createdAt|date("H:i:s") }} dans la Catégorie <strong style ='color:darkgreen'> {{ article.category.title }} </strong> </span>       
         </div>
 
