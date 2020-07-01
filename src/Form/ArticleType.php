@@ -15,13 +15,8 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('title')
-<<<<<<< HEAD
             ->add('category', EntityType::class, [ // we are adding a new field here to select a category on adding or modifying an Article
                 'class' => Category::class, 
-=======
-            ->add('category', EntityType::class, [ // creating a new field Category on adding & modifying an Article.
-                'class' => Category::class,
->>>>>>> b4b04c116d82e89d213b6680c20d85586fc4f2fd
                 'choice_label' => 'title'
             ])
             ->add('content')
